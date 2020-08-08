@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "./build",
+    "rootDirs": ["src", "test"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+
+    "esModuleInterop": true
+  },
+  "exclude": ["./node_modules/**/*", "./.vscode/*", "./build/**/*", "./coverage"]
+}
