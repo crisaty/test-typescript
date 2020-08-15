@@ -5,6 +5,7 @@
     "sourceMap": true,
     "outDir": "./build",
     "rootDirs": ["src", "test"],
+
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -12,8 +13,15 @@
     "noImplicitThis": true,
     "moduleResolution": "node",
     "baseUrl": "./",
-
+    "paths": {
+      "@src/*": ["src/*"],
+    },
     "esModuleInterop": true
   },
-  "exclude": ["./node_modules/**/*", "./.vscode/*", "./build/**/*", "./coverage"]
+  "exclude": [
+    "./node_modules/**/*",
+    "./.vscode/*",
+    "./build/**/*",
+    "./coverage"
+  ]
 }

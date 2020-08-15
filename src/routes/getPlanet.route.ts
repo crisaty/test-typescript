@@ -1,40 +1,38 @@
 import { Context } from 'koa'
-
-import fetch from 'node-fetch'
 import Joi from 'joi'
+import fetch, { Response, RequestInfo, RequestInit } from 'node-fetch'
+export type Fetcher = (url: RequestInfo, init?: RequestInit) => Promise<Response>
 
 interface IPlanet {
   name: string
   diameter: number
 }
 
-export const getPlanets = (getPlanetInfo: any) => async (planetId: number): Promise<IPlanet> => {
-  const schema = Joi.object<IPlanet>({
-    name: Joi.string().required(),
-    diameter: Joi.number().required()
-  }).options({
-    allowUnknown: true
-  })
+type GetPlanetsService = (id: number) => Promise<IPlanet>
+export const getPlanetsBuilder = (getPlanetInfo: Fetcher): GetPlanetsService =>
+  async (planetId: number): Promise<IPlanet> => {
+    const schema = Joi.object<IPlanet>({
+      name: Joi.string().required(),
+      diameter: Joi.number().required()
+    }).options({ allowUnknown: true })
 
-  const response = await getPlanetInfo(`https://swapi.dev/api/planets/${planetId}`)
+    const response = await getPlanetInfo(`https://swapi.dev/api/planets/${planetId}`)
 
-  const result = schema.validate(await response.json())
+    const result = schema.validate(await response.json())
 
-  if (result.error) {
-    throw result.error
-  } else {
-    return result.value
+    if (result.error) {
+      throw result.error
+    } else {
+      return result.value
+    }
   }
-}
 
-const getPlanetReady = getPlanets(fetch)
+const getPlanetService = getPlanetsBuilder(fetch)
 
-const getPlanet = async (ctx: Context) => {
-  // console.log(ctx.params.planetName)
+const getPlanetRouteHandler = async (ctx: Context) => {
   const planetId = ctx.params.planetId
-  const result = await getPlanetReady(planetId)
-  // console.log(result)
+  const result = await getPlanetService(planetId)
   ctx.body = result
 }
 
-export default getPlanet
+export default getPlanetRouteHandler
