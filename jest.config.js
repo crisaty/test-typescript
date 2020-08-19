@@ -7,5 +7,5 @@ module.exports = {
   bail: 1,
   verbose: true,
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**'],
-  coverageDirectory: './coverage'
+  coverageDirectory: './coverage',
 }
