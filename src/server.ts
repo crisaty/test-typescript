@@ -6,6 +6,18 @@ import json from 'koa-json'
 import { AddressInfo } from 'net'
 
 import getPlanet from './routes/getPlanet.route'
+import mongoose from 'mongoose'
+require('dotenv').config()
+const MONGO_URL: any = process.env.MONGO_URL
+
+// Database
+mongoose
+  .connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('Mongo DB Connected'))
+  .catch((err) => console.log(err))
 
 const api = new Koa()
 const router = new Router()

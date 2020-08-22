@@ -3,6 +3,8 @@ import Joi from 'joi'
 import fetch, { Response, RequestInfo, RequestInit } from 'node-fetch'
 export type Fetcher = (url: RequestInfo, init?: RequestInit) => Promise<Response>
 
+import { planetRepository } from '../repositories/planet.repository'
+
 interface IPlanet {
   name: string
   diameter: number
@@ -20,6 +22,8 @@ export const getPlanetsBuilder = (getPlanetInfo: Fetcher): GetPlanetsService => 
   const response = await getPlanetInfo(`https://swapi.dev/api/planets/${planetId}`)
 
   const result = schema.validate(await response.json())
+
+  planetRepository.savePlanet(result.value)
 
   if (result.error) {
     throw result.error
